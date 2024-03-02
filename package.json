@@ -5,7 +5,9 @@
   "main": "dist/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon"
+    "start:local": "cross-env NODE_ENV=local nodemon",
+    "start:live": "cross-env NODE_EXTRA_CA_CERTS=C:/Users/Will/AppData/Local/mkcert/rootCA.pem NODE_ENV=live nodemon",
+    "start:liveRel": "cross-env NODE_EXTRA_CA_CERTS=\"$(mkcert -CAROOT)\" NODE_ENV=live nodemon"
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +17,7 @@
     "@types/express": "^4.17.21",
     "@types/node": "^20.11.20",
     "@typescript-eslint/parser": "^7.0.2",
+    "cross-env": "^7.0.3",
     "debug": "^4.3.4",
     "eslint": "^8.57.0",
     "nodemon": "^3.1.0",
