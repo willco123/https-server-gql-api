@@ -15,6 +15,10 @@
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true
   },
+  "ts-node": {
+    "esm": true,
+    "files": true
+  },
   "compileOnSave": true,
   "include": ["src/**/*"],
   "exclude": [

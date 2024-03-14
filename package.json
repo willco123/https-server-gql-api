@@ -6,8 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:local": "cross-env NODE_ENV=local nodemon",
-    "start:live": "cross-env NODE_EXTRA_CA_CERTS=C:/Users/Will/AppData/Local/mkcert/rootCA.pem NODE_ENV=live nodemon",
-    "start:liveRel": "cross-env NODE_EXTRA_CA_CERTS=\"$(mkcert -CAROOT)\" NODE_ENV=live nodemon"
+    "start:live": "cross-env NODE_EXTRA_CA_CERTS=\"$(mkcert -CAROOT)\" NODE_ENV=live nodemon"
   },
   "author": "",
   "license": "ISC",
