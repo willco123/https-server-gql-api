@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
@@ -7,8 +8,8 @@ import https from "https";
 import fs from "fs";
 import cors from "cors";
 
-import { typeDefs, resolvers } from "./apolloSchema";
-import { MyContext } from "./types";
+import { typeDefs, resolvers } from "./schema.js";
+import { MyContext } from "./types.js";
 
 const app = express();
 const env = process.env.NODE_ENV;
@@ -26,7 +27,6 @@ const httpServer =
         app(req, res);
       })
     : http.createServer(app);
-
 const server = new ApolloServer<MyContext>({
   typeDefs,
   resolvers,
@@ -46,4 +46,4 @@ app.use(
 
 await new Promise<void>((resolve) => httpServer.listen({ port }, resolve));
 
-console.log(`🚀 Server ready at ${domain}:${port}`);
+console.log(`Apollo Server ready at ${domain}:${port}`);
