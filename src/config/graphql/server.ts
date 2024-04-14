@@ -12,9 +12,11 @@ import { Server } from "../../types.js";
 export default async function listenGraphql({
   httpServer,
   port,
+  connectionProtocol,
 }: {
   httpServer: Server;
   port: String | undefined;
+  connectionProtocol: String | undefined;
 }) {
   const server = new ApolloServer<MyContext>({
     typeDefs,
@@ -34,4 +36,7 @@ export default async function listenGraphql({
   );
 
   await new Promise<void>((resolve) => httpServer.listen({ port }, resolve));
+  console.log(
+    `Graphql Server established\n Connection protocol: ${connectionProtocol}\n Listening on port ${port}`,
+  );
 }

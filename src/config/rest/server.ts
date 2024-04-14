@@ -11,7 +11,7 @@ export default function listenRest({
 }) {
   httpServer.listen({ port, connectionProtocol }, () => {
     console.log(
-      `Connection Protocol: ${connectionProtocol}, listening on port ${port}`,
+      `Rest Server established\n Connection protocol: ${connectionProtocol}\n Listening on port ${port}`,
     );
   });
 }

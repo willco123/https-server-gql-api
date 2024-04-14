@@ -1,9 +1,9 @@
 import "dotenv/config";
-import ServerTypes from "./config/enums/ServerTypes";
-import ConnectionProtocols from "./config/enums/ConnectionProtocols";
+import ServerTypes from "./config/enums/ServerTypes.js";
+import ConnectionProtocols from "./config/enums/ConnectionProtocols.js";
 
 const serverType = process.env.SERVER_TYPE;
-const connectionProtocol = process.env.CONN_TYPE;
+const connectionProtocol = process.env.CONN_PROTOCOL;
 const port = process.env.PORT;
 
 const httpServer = await (async () => {
@@ -27,7 +27,7 @@ switch (serverType) {
     const { default: listenGraphQL } = await import(
       "./config/graphql/server.js"
     );
-    listenGraphQL({ httpServer, port });
+    listenGraphQL({ httpServer, port, connectionProtocol });
     break;
 
   default:
