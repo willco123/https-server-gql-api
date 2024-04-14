@@ -1,13 +1,15 @@
-import { Server as HTTPServer } from "http";
-import { Server as HTTPSServer } from "https";
+import { Server } from "../../types";
 
-type Server = HTTPServer | HTTPSServer;
-
-const connectionProtocol = process.env.CONN_PROTOCOL;
-const port = process.env.PORT;
-
-export default function listenRest(httpServer: Server) {
-  httpServer.listen({ port }, () => {
+export default function listenRest({
+  httpServer,
+  port,
+  connectionProtocol,
+}: {
+  httpServer: Server;
+  port: String | undefined;
+  connectionProtocol: String | undefined;
+}) {
+  httpServer.listen({ port, connectionProtocol }, () => {
     console.log(
       `Connection Protocol: ${connectionProtocol}, listening on port ${port}`,
     );

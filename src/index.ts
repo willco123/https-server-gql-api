@@ -1,27 +1,36 @@
 import "dotenv/config";
 import ServerTypes from "./config/enums/ServerTypes";
 import ConnectionProtocols from "./config/enums/ConnectionProtocols";
+
 const serverType = process.env.SERVER_TYPE;
 const connectionProtocol = process.env.CONN_TYPE;
+const port = process.env.PORT;
 
-switch (connectionProtocol) {
-  case ConnectionProtocols.HTTP:
-    await import("./config/rest/server.js");
-    break;
-  case ConnectionProtocols.HTTPS:
-    await import("./config/graphql/server.js");
-    break;
-  default:
-    await import("./config/rest/server.js");
-}
+const httpServer = await (async () => {
+  switch (connectionProtocol) {
+    case ConnectionProtocols.HTTPS:
+      const { default: httpsServer } = await import(
+        "./config/http/httpServer.js"
+      );
+      return httpsServer;
+
+    default:
+      const { default: httpServer } = await import(
+        "./config/http/httpServer.js"
+      );
+      return httpServer;
+  }
+})();
 
 switch (serverType) {
-  case ServerTypes.REST:
-    await import("./config/rest/server.js");
-    break;
   case ServerTypes.GRAPHQL:
-    await import("./config/graphql/server.js");
+    const { default: listenGraphQL } = await import(
+      "./config/graphql/server.js"
+    );
+    listenGraphQL({ httpServer, port });
     break;
+
   default:
-    await import("./config/rest/server.js");
+    const { default: listenRest } = await import("./config/rest/server.js");
+    listenRest({ httpServer, port, connectionProtocol });
 }

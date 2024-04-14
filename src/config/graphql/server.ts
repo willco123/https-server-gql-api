@@ -1,49 +1,37 @@
-import "dotenv/config";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import express from "express";
-import http from "http";
-import https from "https";
-import fs from "fs";
 import cors from "cors";
 
+import app from "../../app.js";
 import { typeDefs, resolvers } from "./schema.js";
 import { MyContext } from "./types.js";
+import { Server } from "../../types.js";
 
-const app = express();
-const env = process.env.NODE_ENV;
+export default async function listenGraphql({
+  httpServer,
+  port,
+}: {
+  httpServer: Server;
+  port: String | undefined;
+}) {
+  const server = new ApolloServer<MyContext>({
+    typeDefs,
+    resolvers,
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  });
 
-const domain = env === "live" ? "https://myApi.example" : "http://localhost";
+  await server.start();
 
-const options = {
-  cert: fs.readFileSync("./myApi.example.pem"),
-  key: fs.readFileSync("./myApi.example-key.pem"),
-};
-const port = process.env.PORT;
-const httpServer =
-  env === "live"
-    ? https.createServer(options, function (req, res) {
-        app(req, res);
-      })
-    : http.createServer(app);
-const server = new ApolloServer<MyContext>({
-  typeDefs,
-  resolvers,
-  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-});
+  app.use(
+    "/",
+    cors<cors.CorsRequest>(),
+    express.json(),
+    expressMiddleware(server, {
+      context: async ({ req }) => ({ token: req.headers.token }),
+    }),
+  );
 
-await server.start();
-
-app.use(
-  "/",
-  cors<cors.CorsRequest>(),
-  express.json(),
-  expressMiddleware(server, {
-    context: async ({ req }) => ({ token: req.headers.token }),
-  }),
-);
-
-await new Promise<void>((resolve) => httpServer.listen({ port }, resolve));
-
-console.log(`Apollo Server ready at ${domain}:${port}`);
+  await new Promise<void>((resolve) => httpServer.listen({ port }, resolve));
+}
