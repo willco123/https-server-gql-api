@@ -1,4 +1,4 @@
-import { Server } from "../../types";
+import { Server } from "../../types.js";
 
 export default function listenRest({
   httpServer,
@@ -9,7 +9,7 @@ export default function listenRest({
   port: String | undefined;
   connectionProtocol: String | undefined;
 }) {
-  httpServer.listen({ port, connectionProtocol }, () => {
+  httpServer.listen({ port }, () => {
     console.log(
       `Rest Server established\n Connection protocol: ${connectionProtocol}\n Listening on port ${port}`,
     );

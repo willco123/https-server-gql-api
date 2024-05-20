@@ -9,7 +9,4 @@ const options = {
   cert: fs.readFileSync("./myApi.example.pem"),
   key: fs.readFileSync("./myApi.example-key.pem"),
 };
-
-export default https.createServer(options, function (req, res) {
-  app(req, res);
-});
+export default https.createServer(options, app);

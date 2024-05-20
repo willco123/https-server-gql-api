@@ -1,17 +1,16 @@
 import "dotenv/config";
 import ServerTypes from "./config/enums/ServerTypes.js";
 import ConnectionProtocols from "./config/enums/ConnectionProtocols.js";
-// import https from "https";
 
 const serverType = process.env.SERVER_TYPE;
 const connectionProtocol = process.env.CONN_PROTOCOL;
 const port = process.env.PORT;
 
-const httpServer = await (async () => {
+const httpServer = await (async (connectionProtocol) => {
   switch (connectionProtocol) {
     case ConnectionProtocols.HTTPS:
       const { default: httpsServer } = await import(
-        "./config/http/httpServer.js"
+        "./config/http/httpsServer.js"
       );
       return httpsServer;
 
@@ -21,7 +20,7 @@ const httpServer = await (async () => {
       );
       return httpServer;
   }
-})();
+})(connectionProtocol);
 
 switch (serverType) {
   case ServerTypes.GRAPHQL:

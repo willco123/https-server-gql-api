@@ -5,7 +5,7 @@ import express from "express";
 import cors from "cors";
 
 import app from "../../app.js";
-import { typeDefs, resolvers } from "./schema.js";
+import { schema } from "./schema.js";
 import { MyContext } from "./types.js";
 import { Server } from "../../types.js";
 
@@ -19,8 +19,7 @@ export default async function listenGraphql({
   connectionProtocol: String | undefined;
 }) {
   const server = new ApolloServer<MyContext>({
-    typeDefs,
-    resolvers,
+    schema,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
 
